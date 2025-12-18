@@ -1,18 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Media Expo </title>
+    <!-- 🔥 IMPORT MAP (THIS IS THE KEY FIX) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+            "three/examples/jsm/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+    <link rel="stylesheet" href="./css/main.css">
 </head>
+
 <body>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script> -->
 
     <script src="./assets/data/students.js" type="module"></script>
     <script src="./js/app.js" type="module"></script>
+    <section class="hero">
+        <div id="canvas-container" class="canvas-container"></div>
+        <div class="hero-overlay">
+            <header class="hero-overlay__header">
+                <h1>Interactive Media Expo 2026</h1>
+                <nav class="hero-overlay__nav">
+                    <ul>
+                        <li><a href="#students-list">Projecten</a></li>
+                        <li><a href="#student-modal">Over</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="hero-overlay__details">
+                <div class="event-detail event-detail--datetime">
+                    <!-- <strong class="event-detail__label">Date & Time:</strong><br> -->
+                    <span class="event-detail__value">15 januari, 2026</span>
+                </div>
+                <div class="event-detail event-detail--location">
+                    <!-- <strong class="event-detail__label">Location</strong><br> -->
+                    <span class="event-detail__value">Location TBA</span>
+                </div>
 
-    <div id="canvas-container" style="width: 100%; height: 100vh;"></div>
+            </div>
+        </div>
+    </section>
     <div id="students-list"></div>
+
+    <aside>
+        <div class="student-info" id="student-modal">
+            <h2 id="student-name">Student Name</h2>
+            <p id="student-bio">Student Bio</p>
+            <div id="student-projects">
+                <!-- Project links will be populated here -->
+            </div>
+        </div>
+
+    </aside>
+    <footer>
+        <div class="event-detail event-detail--contact">
+            <strong class="event-detail__label">Contact:</strong><br>
+            <span class="event-detail__value">info@interactive-media-expo.com</span>
+        </div>
+    </footer>
 </body>
+
 </html>
