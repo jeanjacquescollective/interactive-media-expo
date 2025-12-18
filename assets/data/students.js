@@ -1,0 +1,23 @@
+export const STUDENTS = [
+    "Jean-Charles Zogbelemou",
+    "Mees Akveld",
+    "Emilien Callant",
+    "Maarten Coppens",
+    "Bram Criel",
+    "Bavo De Bondt",
+    "Mathijs De Langhe",
+    "Darwin De Mits",
+    "Lies De Praeter",
+    "Tristan De Ridder",
+    "Justin Descan",
+    "Reinhart Schepens",
+    "Lode Snaet",
+    "Emie Van de Veire",
+    "Simon Van Tomme",
+    "Joran Vreye",
+    "Teynur Yuseinov",
+    "Jan Skrzynski",
+    "Jarno Pennoit",
+    "Lukas Van Nuffel",
+    "Louis Dierickx"
+];
