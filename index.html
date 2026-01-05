@@ -15,6 +15,12 @@
     }
     </script>
     <link rel="stylesheet" href="./css/main.css">
+
+    <link rel="icon" type="image/png" href="./assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./assets/favicon/site.webmanifest" />
 </head>
 
 <body>
@@ -25,25 +31,56 @@
         <div id="canvas-container" class="canvas-container"></div>
         <div class="hero-overlay">
             <header class="hero-overlay__header">
-                <h1>Interactive Media Expo 2026</h1>
+                <h1>Interactive Media Expo</h1>
                 <nav class="hero-overlay__nav">
                     <ul>
-                        <li><a href="#students-list">Projecten</a></li>
-                        <li><a href="#student-modal">Over</a></li>
+                        <li><a href="#projects">Projecten</a></li>
+                        <li><a href="#info">Over</a></li>
                     </ul>
                 </nav>
             </header>
             <div class="hero-overlay__details">
-                <div class="event-detail event-detail--datetime">
-                    <!-- <strong class="event-detail__label">Date & Time:</strong><br> -->
-                    <span class="event-detail__value">15 januari, 2026</span>
-                </div>
-                <div class="event-detail event-detail--location">
-                    <!-- <strong class="event-detail__label">Location</strong><br> -->
-                    <span class="event-detail__value">Location TBA</span>
-                </div>
+                <div class="event-card__item event-card__item--datetime"
+                    style="display:flex;align-items:flex-start;gap:0.75rem;">
+                    <svg class="event-card__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        aria-hidden="true" focusable="false" style="flex:0 0 20px;opacity:0.95">
+                        <path
+                            d="M7 2v2M17 2v2M3 8h18M5 22h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        </path>
+                    </svg>
+                    <div class="event-card__content">
+                        <strong class="event-card__label">15
+                            januari, 2026</strong> <br>
+                        <time class="event-card__value" datetime="2026-01-15T15:00"
+                            style="color:#dcdcdc;font-size:0.9rem;">15:00 — 17:00</time>
 
+                    </div>
+                </div>
+                <div class="event-card__item event-card__item--price">
+                    Gratis toegang
+                </div>
+                <div class="event-card__item event-card__item--location"
+                    style="display:flex;align-items:flex-start;gap:0.75rem;">
+                    <svg class="event-card__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        aria-hidden="true" focusable="false" style="flex:0 0 20px;opacity:0.95">
+                        <path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10z" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                        <circle cx="12" cy="10" r="2.5" fill="currentColor"></circle>
+                    </svg>
+                    <div class="event-card__content">
+                        <strong class="event-card__label"
+                            >Auditorium Wintercircus</strong>
+                        <address class="event-card__value"
+                            style="color:#dcdcdc;font-size:0.9rem;line-height:1.3;font-style:normal;">
+                            Sint-Pietersnieuwstraat 11<br>
+                            9000 Gent
+                        </address>
+                    </div>
+                </div>
             </div>
+
+        </div>
         </div>
     </section>
     <div id="students-list"></div>
@@ -58,12 +95,76 @@
         </div>
 
     </aside>
-    <footer>
-        <div class="event-detail event-detail--contact">
-            <strong class="event-detail__label">Contact:</strong><br>
-            <span class="event-detail__value">info@interactive-media-expo.com</span>
+
+    <div class="divider"></div>
+
+    <section class="info" id="info">
+        <h2 class="info__title">Interactive Media Expo</h2>
+        <div class="info__content">
+            <p class="info__text info__text--lead">De Interactive Media Expo is een jaarlijks evenement georganiseerd
+                met studenten van de opleiding
+                Interactive Media Development aan Artevelde Hogeschool. Tijdens deze expo presenteren studenten hun
+                innovatieve projecten die
+                technologie en creativiteit combineren. Bezoekers krijgen de kans om de nieuwste ontwikkelingen in
+                interactieve media te ontdekken en in contact te komen met de makers achter deze projecten.</p>
+            <p class="info__text">Of je nu een professional bent in de industrie, een student die geïnteresseerd is in
+                interactieve media, of
+                gewoon nieuwsgierig naar wat er mogelijk is met moderne technologie, de Interactive Media Expo biedt
+                voor
+                ieder wat wils. Kom langs om inspiratie op te doen, nieuwe ideeën te verkennen en te netwerken met
+                gelijkgestemde
+                individuen.</p>
+        </div>
+    </section>
+<!-- 
+    <div class="divider"></div>
+
+    <section class="projects" id="projects">
+        <div class="projects__grid" id="projects-grid" aria-live="polite"></div>
+
+        <template id="project-template">
+            <article class="project">
+                <header class="project__header">
+                    <div class="project__meta">
+                        <span class="project__group">Groep <span class="project__group-num"></span></span>
+                        <time class="project__time" datetime="">
+                            <span class="project__start"></span> — <span class="project__end"></span>
+                        </time>
+                    </div>
+                    <h3 class="project__title"></h3>
+                </header>
+
+                <div class="project__body">
+                    <ul class="project__members" aria-label="Leden"></ul>
+                    <p class="project__notes" hidden></p>
+
+                    <div class="project__gallery" aria-label="Project afbeeldingen">
+                        clone <img> for each image -->
+                       <!-- <img class="project__image" src="" alt="" hidden>
+                    </div>
+                </div>
+            </article>
+        </template>
+        <script type="module" src="js/main.js"></script>
+
+    </section> -->
+
+
+    <footer class="site-footer" role="contentinfo" aria-label="Voettekst">
+        <div class="site-footer__inner">
+            <p class="site-footer__copyright">
+                &copy; <time datetime="2026">2026</time> Interactive Media Expo. Ontwikkeld door
+                <a href="https://zjaak.be" target="_blank" rel="noopener noreferrer">zjaak.be</a>.
+            </p>
+            <nav class="site-footer__nav" aria-label="Footer navigatie">
+                <ul>
+                    <li><a href="#projects">Projecten</a></li>
+                    <li><a href="#info">Over</a></li>
+                </ul>
+            </nav>
         </div>
     </footer>
+
 </body>
 
 </html>

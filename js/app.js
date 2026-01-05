@@ -44,6 +44,7 @@ class AtomScene {
 
         this.initLights();
         this.initRotatingLights();
+        // this.initPulsatingLight(); // new pulsating ambient/glow
         this.initBloom();
         this.loadNucleus();
         this.createAtoms();
@@ -70,6 +71,18 @@ class AtomScene {
         });
     }
 
+    // New: create a pulsating glowing light (point light + small emissive sphere for visible glow)
+    initPulsatingLight() {
+        // point light that will pulsate (no visible sphere)
+        this.pulsatingLight = new THREE.PointLight(0xffdd88, 10.0, 0, 0.5);
+        this.pulsatingLight.position.set(0, 0, 0);
+        this.scene.add(this.pulsatingLight);
+
+        // keep a lightweight placeholder so animatePulsating won't throw (no visible mesh)
+        this.pulsatingSphere = new THREE.Object3D();
+        this.pulsatingSphere.material = { opacity: 0 };
+    }
+
     initBloom() {
         this.composer = new EffectComposer(this.renderer);
         this.composer.addPass(new RenderPass(this.scene, this.camera));
@@ -88,7 +101,7 @@ class AtomScene {
                 this.nucleus.traverse(child => {
                     if (child.isMesh) {
                         child.material.emissive.setHex(0xffff00);
-                        child.material.emissiveIntensity = 0.001;
+                        child.material.emissiveIntensity = 0.0035;
                     }
                 });
                 this.scene.add(this.nucleus);
@@ -99,7 +112,7 @@ class AtomScene {
                 const material = new THREE.MeshStandardMaterial({
                     color: 0xffaa00,
                     emissive: 0xffff00,
-                    emissiveIntensity: 0.6
+                    emissiveIntensity: 0.0035
                 });
                 this.nucleus = new THREE.Mesh(geometry, material);
                 this.scene.add(this.nucleus);
@@ -132,65 +145,53 @@ class AtomScene {
         modalDiv.innerHTML = `
             <div class="modal-content">
                 <h3>${student.name}</h3>
-                <div class="modal-pointer"></div>
             </div>
         `;
         
-        // Add dark random colors
-        const darkColors = ['#1a1a2e', '#16213e', '#0f3460', '#1f1f1f', '#2c2c2c'];
-        const randomColor = darkColors[Math.floor(Math.random() * darkColors.length)];
-        modalDiv.style.cssText = `
-            background: ${randomColor};
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            min-width: 200px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            position: relative;
-        `;
+        
 
         // Random pointer position
-        const pointer = modalDiv.querySelector('.modal-pointer');
-        const positions = ['top', 'bottom', 'left', 'right'];
-        const randomPos = positions[Math.floor(Math.random() * positions.length)];
+        // const pointer = modalDiv.querySelector('.modal-pointer');
+        // const positions = ['top', 'bottom', 'left', 'right'];
+        // const randomPos = positions[Math.floor(Math.random() * positions.length)];
         
-        pointer.style.cssText = `
-            position: absolute;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-        `;
+        // pointer.style.cssText = `
+        //     position: absolute;
+        //     width: 0;
+        //     height: 0;
+        //     border: 10px solid transparent;
+        // `;
 
-        switch(randomPos) {
-            case 'top':
-                pointer.style.borderBottom = `10px solid ${randomColor}`;
-                pointer.style.top = '-20px';
-                pointer.style.left = '50%';
-                pointer.style.transform = 'translateX(-50%)';
-                break;
-            case 'bottom':
-                pointer.style.borderTop = `10px solid ${randomColor}`;
-                pointer.style.bottom = '-20px';
-                pointer.style.left = '50%';
-                pointer.style.transform = 'translateX(-50%)';
-                break;
-            case 'left':
-                pointer.style.borderRight = `10px solid ${randomColor}`;
-                pointer.style.left = '-20px';
-                pointer.style.top = '50%';
-                pointer.style.transform = 'translateY(-50%)';
-                break;
-            case 'right':
-                pointer.style.borderLeft = `10px solid ${randomColor}`;
-                pointer.style.right = '-20px';
-                pointer.style.top = '50%';
-                pointer.style.transform = 'translateY(-50%)';
-                break;
-        }
+        // switch(randomPos) {
+        //     case 'top':
+        //         pointer.style.borderBottom = `10px solid ${randomColor}`;
+        //         pointer.style.top = '-20px';
+        //         pointer.style.left = '50%';
+        //         pointer.style.transform = 'translateX(-50%)';
+        //         break;
+        //     case 'bottom':
+        //         pointer.style.borderTop = `10px solid ${randomColor}`;
+        //         pointer.style.bottom = '-20px';
+        //         pointer.style.left = '50%';
+        //         pointer.style.transform = 'translateX(-50%)';
+        //         break;
+        //     case 'left':
+        //         pointer.style.borderRight = `10px solid ${randomColor}`;
+        //         pointer.style.left = '-20px';
+        //         pointer.style.top = '50%';
+        //         pointer.style.transform = 'translateY(-50%)';
+        //         break;
+        //     case 'right':
+        //         pointer.style.borderLeft = `10px solid ${randomColor}`;
+        //         pointer.style.right = '-20px';
+        //         pointer.style.top = '50%';
+        //         pointer.style.transform = 'translateY(-50%)';
+        //         break;
+        // }
 
         const cssObject = new CSS3DObject(modalDiv);
         cssObject.position.copy(atom.position);
-        cssObject.position.y += 1;
+        cssObject.position.y += 0.5;
         cssObject.scale.setScalar(0.01);
         
         this.scene.add(cssObject);
@@ -301,6 +302,18 @@ class AtomScene {
         });
     }
 
+    // New: update pulsating light every frame (kept independent of animationPaused so ambient glow continues)
+    animatePulsating() {
+        if (!this.pulsatingLight) return;
+        const t = this.clock.getElapsedTime();
+        // pulsate intensity and sphere size/opacity
+        const pulse = 0.6 + Math.abs(Math.sin(t * 1.8)) * 1.2; // range ~0.6..1.8
+        this.pulsatingLight.intensity = pulse;
+        const sphereScale = 0.5 + Math.abs(Math.sin(t * 1.8)) * 0.9;
+        this.pulsatingSphere.scale.setScalar(sphereScale);
+        this.pulsatingSphere.material.opacity = 0.35 + Math.abs(Math.sin(t * 1.8)) * 0.5;
+    }
+
     animate = () => {
         requestAnimationFrame(this.animate);
 
@@ -312,6 +325,7 @@ class AtomScene {
 
         this.animateAtoms();
         this.animateRotatingLights();
+        this.animatePulsating(); // keep pulsating ambient/glow updated
 
         this.composer.render();
         this.cssRenderer.render(this.scene, this.camera);
