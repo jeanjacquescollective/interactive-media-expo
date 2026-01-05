@@ -341,6 +341,7 @@ h1, .event-card__item--price { font-family: var(--font-family-headings); }
     font-family: var(--font-family-body);
     font-size: 0.95rem;
     box-shadow: 0 -6px 30px rgba(0,0,0,0.5) inset;
+    margin-top: 3rem;
 }
 .site-footer__inner {
     max-width: 1100px;
