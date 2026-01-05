@@ -94,7 +94,7 @@ class AtomScene {
     loadNucleus() {
         const loader = new GLTFLoader();
         loader.load(
-            '../assets/3d/model.gltf',
+            new URL('../assets/3d/model.gltf', import.meta.url).href,
             (gltf) => {
                 this.nucleus = gltf.scene;
                 this.nucleus.scale.setScalar(0.1);
