@@ -52,18 +52,35 @@ jury
 
 
  
-Volledige dag:
+09u00 - 12u00:
+Ilja Van houtreve - kopergietery
+Jannes Lambrecht - docent
+Niels Minne - docent
+Linde Raats - deel 1 en deeltje deel 2
+
+13u00 - 15u00:
 Ilja Van houtreve - kopergietery
 Jannes Lambrecht - docent
 Niels Minne - docent
 
-
-Namiddag (vanaf 15u00):
+Linde Raats - deel 1 en deeltje deel 2
+Adriaan Glibert - Docent
 philippe de pauw-waterschoot - DVG
+
+
+15u00 - 17u00:
+Ilja Van houtreve - kopergietery
+Jannes Lambrecht - docent
+Niels Minne - docent
+
 Wio D'hespeel - LUCA School of Arts
 Adriaan Glibert - Docent
+philippe de pauw-waterschoot - DVG
 
-Voormiddag
+Frederick Roegiers - Docent
+
+Kina Guys 
+
 
 
 
