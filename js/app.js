@@ -87,7 +87,7 @@ class AtomScene {
                 this.nucleus.traverse(child => {
                     if (child.isMesh) {
                         child.material.emissive.setHex(0xffff00);
-                        child.material.emissiveIntensity = 0.0055;
+                        child.material.emissiveIntensity = 0.0095;
                     }
                 });
                 this.scene.add(this.nucleus);
