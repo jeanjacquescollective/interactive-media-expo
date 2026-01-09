@@ -30,7 +30,9 @@ const projects = [
             "Mathijs De Langhe"
         ],
         images: [
-            "assets/images/camouflagekaart.jpg"
+            "assets/images/camouflagekaart-2-min.jpg",
+            "assets/images/camouflagekaart-1-min.jpg",
+            // "assets/images/camouflagekaart-3-min.jpg"
         ]
     },
     {
@@ -43,10 +45,10 @@ const projects = [
             "Lies De Praeter",
             "Lukas Van Nuffel"
         ],
-        // images: [
-        //     "assets/images/de-steenschat-1.jpg",
-        //     "assets/images/de-steenschat-2.jpg"
-        // ]
+        images: [
+            "assets/images/steenschat-1-min.jpg",
+            "assets/images/steenschat-2-min.jpg"
+        ]
     },
     {
         group: 4,
@@ -60,7 +62,11 @@ const projects = [
             "Simon Van Tomme"
         ],
         images: [
-            "assets/images/beestige-tijdsreizigers.jpg"
+
+            "assets/images/beestige-tijdsreizigers-2-min.jpg",
+                        "assets/images/beestige-tijdsreizigers-1-min.jpg",
+                        // "assets/images/beestige-tijdsreizigers-3-min.jpg"
+
         ]
     },
     {
@@ -74,7 +80,7 @@ const projects = [
             "Reinhart Schepens"
         ],
         images: [
-            "assets/images/wingspan.jpg",
+            "assets/images/wingspan-1-min.jpg",
             // "assets/images/wingspan-2.jpg"
         ]
     },
@@ -88,7 +94,7 @@ const projects = [
         ],
         notes: "Teynur neemt vermoedelijk niet meer deel voor deze examenkans",
         images: [
-            "assets/images/dino-safari-1.jpg"
+            "assets/images/dino-safari-1-min.jpg"
         ]
     }
 ];
