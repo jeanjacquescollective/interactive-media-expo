@@ -13,10 +13,10 @@ const projects = [
             "Tristan De Ridder"
         ],
         notes: "Arda Segers gestopt",
-        // images: [
-        //     "assets/images/onder-druk-1.jpg",
-        //     "assets/images/onder-druk-2.jpg"
-        // ]
+        images: [
+            "assets/images/onder-druk-1.jpg",
+            // "assets/images/onder-druk-2.jpg"
+        ]
     },
     {
         group: 2,
@@ -46,7 +46,7 @@ const projects = [
             "Lukas Van Nuffel"
         ],
         images: [
-            "assets/images/steenschat-1-min.jpg",
+            // "assets/images/steenschat-1-min.jpg",
             "assets/images/steenschat-2-min.jpg"
         ]
     },
@@ -64,8 +64,8 @@ const projects = [
         images: [
 
             "assets/images/beestige-tijdsreizigers-2-min.jpg",
-                        "assets/images/beestige-tijdsreizigers-1-min.jpg",
-                        // "assets/images/beestige-tijdsreizigers-3-min.jpg"
+            "assets/images/beestige-tijdsreizigers-1-min.jpg",
+            // "assets/images/beestige-tijdsreizigers-3-min.jpg"
 
         ]
     },
@@ -81,7 +81,8 @@ const projects = [
         ],
         images: [
             "assets/images/wingspan-1-min.jpg",
-            // "assets/images/wingspan-2.jpg"
+
+            "assets/images/wingspan-2.jpg"
         ]
     },
     {
