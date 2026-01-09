@@ -8,15 +8,17 @@ import { STUDENTS } from '../assets/data/students.js';
 
 class AtomScene {
     constructor() {
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 100);
         this.camera.position.z = 12;
 
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: !this.isMobile });
+        const pixelRatio = this.isMobile ? 1 : devicePixelRatio;
         this.renderer.setSize(innerWidth, innerHeight);
-        this.renderer.setPixelRatio(devicePixelRatio);
+        this.renderer.setPixelRatio(pixelRatio);
         document.getElementById('canvas-container').appendChild(this.renderer.domElement);
-
 
         // CSS3D Renderer for 3D HTML elements
         this.cssRenderer = new CSS3DRenderer();
@@ -38,55 +40,45 @@ class AtomScene {
 
         this.rotatingLights = [];
         this.originalColors = new Map();
-        
+
         this.animationPaused = false;
         this.currentModal = null;
 
-        this.initLights();
+        // this.initLights();
         this.initRotatingLights();
-        // this.initPulsatingLight(); // new pulsating ambient/glow
-        this.initBloom();
+        if (!this.isMobile) {
+            this.initBloom();
+            this.addEvents();
+
+        }
         this.loadNucleus();
         this.createAtoms();
-        this.addEvents();
         this.animate();
     }
 
     initLights() {
-        this.scene.add(new THREE.AmbientLight(0xffffff, 1));
-        const key = new THREE.PointLight(0x88ccff, 3, 40);
+        this.scene.add(new THREE.AmbientLight(0xffffff, this.isMobile ? 0.8 : 1));
+        const key = new THREE.PointLight(0x88ccff, this.isMobile ? 1.5 : 3, 40);
         key.position.set(6, 6, 6);
         this.scene.add(key);
     }
 
     initRotatingLights() {
         const colors = [0xff4444, 0x44ff44, 0x4444ff];
+        const count = this.isMobile ? 1 : 3; // Only 1 light on mobile
         const radius = 3;
 
-        colors.forEach((color, idx) => {
-            const light = new THREE.PointLight(color, 1.5, 10, 2);
+        for (let idx = 0; idx < count; idx++) {
+            const light = new THREE.PointLight(colors[idx], this.isMobile ? 1 : 1.5, 10, 2);
             light.position.set(Math.cos(idx * 2) * radius, 0, Math.sin(idx * 2) * radius);
             this.scene.add(light);
             this.rotatingLights.push({ light, radius, speed: 0.5 + Math.random() * 0.5, angle: Math.random() * Math.PI * 2 });
-        });
-    }
-
-    // New: create a pulsating glowing light (point light + small emissive sphere for visible glow)
-    initPulsatingLight() {
-        // point light that will pulsate (no visible sphere)
-        this.pulsatingLight = new THREE.PointLight(0xffdd88, 10.0, 0, 0.5);
-        this.pulsatingLight.position.set(0, 0, 0);
-        this.scene.add(this.pulsatingLight);
-
-        // keep a lightweight placeholder so animatePulsating won't throw (no visible mesh)
-        this.pulsatingSphere = new THREE.Object3D();
-        this.pulsatingSphere.material = { opacity: 0 };
+        }
     }
 
     initBloom() {
         this.composer = new EffectComposer(this.renderer);
         this.composer.addPass(new RenderPass(this.scene, this.camera));
-
         const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.3, 0.6, 0.15);
         this.composer.addPass(bloom);
     }
@@ -108,7 +100,7 @@ class AtomScene {
             },
             undefined,
             () => {
-                const geometry = new THREE.SphereGeometry(1, 32, 32);
+                const geometry = new THREE.SphereGeometry(1, this.isMobile ? 16 : 32, this.isMobile ? 16 : 32);
                 const material = new THREE.MeshStandardMaterial({
                     color: 0xffaa00,
                     emissive: 0xffff00,
@@ -121,12 +113,15 @@ class AtomScene {
     }
 
     createAtoms() {
-        const geometry = new THREE.SphereGeometry(0.2, 16, 16);
+        const geometry = new THREE.SphereGeometry(0.2, this.isMobile ? 8 : 16, this.isMobile ? 8 : 16);
         const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc, emissive: 0x00ffaa, emissiveIntensity: 0.4 });
 
-        STUDENTS.forEach((student) => {
+        const atomCount = this.isMobile ? Math.min(STUDENTS.length, 15) : STUDENTS.length; // Limit atoms on mobile
+
+        for (let i = 0; i < atomCount; i++) {
+            const student = STUDENTS[i];
             const atom = new THREE.Mesh(geometry, material.clone());
-            const radius = 5  + Math.random() * 3;
+            const radius = 5 + Math.random() * 3;
             const speed = 0.2 + Math.random() * 0.3;
             const angle = Math.random() * Math.PI * 2;
 
@@ -136,7 +131,7 @@ class AtomScene {
             this.atomMeshes.add(atom);
             this.atomData.push(atom);
             this.originalColors.set(atom, 0x00ffcc);
-        });
+        }
     }
 
     create3DModal(student, atom) {
@@ -147,58 +142,24 @@ class AtomScene {
                 <h3>${student.name}</h3>
             </div>
         `;
-        
-        
-
-        // Random pointer position
-        // const pointer = modalDiv.querySelector('.modal-pointer');
-        // const positions = ['top', 'bottom', 'left', 'right'];
-        // const randomPos = positions[Math.floor(Math.random() * positions.length)];
-        
-        // pointer.style.cssText = `
-        //     position: absolute;
-        //     width: 0;
-        //     height: 0;
-        //     border: 10px solid transparent;
-        // `;
-
-        // switch(randomPos) {
-        //     case 'top':
-        //         pointer.style.borderBottom = `10px solid ${randomColor}`;
-        //         pointer.style.top = '-20px';
-        //         pointer.style.left = '50%';
-        //         pointer.style.transform = 'translateX(-50%)';
-        //         break;
-        //     case 'bottom':
-        //         pointer.style.borderTop = `10px solid ${randomColor}`;
-        //         pointer.style.bottom = '-20px';
-        //         pointer.style.left = '50%';
-        //         pointer.style.transform = 'translateX(-50%)';
-        //         break;
-        //     case 'left':
-        //         pointer.style.borderRight = `10px solid ${randomColor}`;
-        //         pointer.style.left = '-20px';
-        //         pointer.style.top = '50%';
-        //         pointer.style.transform = 'translateY(-50%)';
-        //         break;
-        //     case 'right':
-        //         pointer.style.borderLeft = `10px solid ${randomColor}`;
-        //         pointer.style.right = '-20px';
-        //         pointer.style.top = '50%';
-        //         pointer.style.transform = 'translateY(-50%)';
-        //         break;
-        // }
 
         const cssObject = new CSS3DObject(modalDiv);
         cssObject.position.copy(atom.position);
         cssObject.position.y += 0.5;
         cssObject.scale.setScalar(0.01);
-        
+
         this.scene.add(cssObject);
         return cssObject;
     }
 
     addEvents() {
+        window.addEventListener('touchmove', e => {
+            const touch = e.touches[0];
+            this.mouse.x = (touch.clientX / innerWidth) * 2 - 1;
+            this.mouse.y = -(touch.clientY / innerHeight) * 2 + 1;
+            this.checkHover();
+        }, { passive: true });
+
         window.addEventListener('mousemove', e => {
             this.mouse.x = (e.clientX / innerWidth) * 2 - 1;
             this.mouse.y = -(e.clientY / innerHeight) * 2 + 1;
@@ -217,7 +178,7 @@ class AtomScene {
             this.camera.aspect = innerWidth / innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(innerWidth, innerHeight);
-            this.composer.setSize(innerWidth, innerHeight);
+            if (this.composer) this.composer.setSize(innerWidth, innerHeight);
             this.cssRenderer.setSize(innerWidth, innerHeight);
         });
     }
@@ -226,7 +187,7 @@ class AtomScene {
         const raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(this.mouse, this.camera);
         const intersects = raycaster.intersectObjects(this.atomData);
-        
+
         if (intersects.length > 0) {
             const newHoveredIndex = this.atomData.indexOf(intersects[0].object);
             if (this.hoveredIndex !== newHoveredIndex) {
@@ -234,20 +195,16 @@ class AtomScene {
                     const prevAtom = this.atomData[this.hoveredIndex];
                     prevAtom.material.color.setHex(this.originalColors.get(prevAtom));
                 }
-                
+
                 this.hoveredIndex = newHoveredIndex;
                 const atom = this.atomData[this.hoveredIndex];
                 atom.material.color.setHex(0xffff00);
-                
-                // Remove old modal
+
                 if (this.currentModal) {
                     this.scene.remove(this.currentModal);
                 }
-                
-                // Create new 3D modal
+
                 this.currentModal = this.create3DModal(atom.userData.student, atom);
-                
-                // Pause animation
                 this.animationPaused = true;
             }
             document.body.style.cursor = 'pointer';
@@ -255,14 +212,12 @@ class AtomScene {
             if (this.hoveredIndex !== null) {
                 const atom = this.atomData[this.hoveredIndex];
                 atom.material.color.setHex(this.originalColors.get(atom));
-                
-                // Remove modal
+
                 if (this.currentModal) {
                     this.scene.remove(this.currentModal);
                     this.currentModal = null;
                 }
-                
-                // Resume animation
+
                 this.animationPaused = false;
             }
             this.hoveredIndex = null;
@@ -272,7 +227,7 @@ class AtomScene {
 
     animateAtoms() {
         if (this.animationPaused) return;
-        
+
         this.atomData.forEach(atom => {
             const d = atom.userData;
             d.angle += d.speed * 0.01;
@@ -294,24 +249,12 @@ class AtomScene {
 
     animateRotatingLights() {
         if (this.animationPaused) return;
-        
+
         const t = this.clock.getElapsedTime();
         this.rotatingLights.forEach(r => {
             r.angle += r.speed * 0.01;
             r.light.position.set(Math.cos(r.angle) * r.radius, Math.sin(t) * 0.5, Math.sin(r.angle) * r.radius);
         });
-    }
-
-    // New: update pulsating light every frame (kept independent of animationPaused so ambient glow continues)
-    animatePulsating() {
-        if (!this.pulsatingLight) return;
-        const t = this.clock.getElapsedTime();
-        // pulsate intensity and sphere size/opacity
-        const pulse = 0.6 + Math.abs(Math.sin(t * 1.8)) * 1.2; // range ~0.6..1.8
-        this.pulsatingLight.intensity = pulse;
-        const sphereScale = 0.5 + Math.abs(Math.sin(t * 1.8)) * 0.9;
-        this.pulsatingSphere.scale.setScalar(sphereScale);
-        this.pulsatingSphere.material.opacity = 0.35 + Math.abs(Math.sin(t * 1.8)) * 0.5;
     }
 
     animate = () => {
@@ -325,9 +268,12 @@ class AtomScene {
 
         this.animateAtoms();
         this.animateRotatingLights();
-        this.animatePulsating(); // keep pulsating ambient/glow updated
 
-        this.composer.render();
+        if (this.composer) {
+            this.composer.render();
+        } else {
+            this.renderer.render(this.scene, this.camera);
+        }
         this.cssRenderer.render(this.scene, this.camera);
     };
 }
