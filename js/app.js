@@ -86,8 +86,11 @@ class AtomScene {
                 this.nucleus.scale.setScalar(0.1);
                 this.nucleus.traverse(child => {
                     if (child.isMesh) {
-                        child.material.emissive.setHex(0xffff00);
-                        child.material.emissiveIntensity = 0.0095;
+                        child.material.emissive.setHex(0xab61ff);
+                        child.material.emissiveIntensity = 0.0495;
+                        if (!this.isMobile) {
+                            child.material.emissiveIntensity = 0.0295;
+                        }
                     }
                 });
                 this.scene.add(this.nucleus);
@@ -96,7 +99,7 @@ class AtomScene {
             () => {
                 this.nucleus = new THREE.Mesh(
                     new THREE.SphereGeometry(1, 16, 16),
-                    new THREE.MeshBasicMaterial({ color: 0xffaa00 })
+                    new THREE.MeshBasicMaterial({ color: 0xab61ff })
                 );
                 this.scene.add(this.nucleus);
             }
