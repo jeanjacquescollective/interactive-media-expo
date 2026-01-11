@@ -70,6 +70,8 @@
 /* Reset / Base */
 * {
     box-sizing: border-box;
+        /* overflow-x: hidden; */
+
 }
 
 html {
@@ -266,7 +268,7 @@ h1,
 /* Projects grid */
 .projects__grid {
     display: grid;
-    grid-template-columns: minmax(var(--card-min), 1fr);
+    grid-template-columns: 1fr;
     gap: 1.5rem;
     width: 100%;
     max-width: var(--grid-max);
@@ -309,6 +311,14 @@ h1,
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
+    flex-flow: column;
+}
+
+@media screen and (min-width: 600px) {
+    .project__header {
+        flex-flow: row;
+        align-items: center;
+    }
 }
 
 .project__meta {
@@ -355,6 +365,7 @@ h1,
     font-size: 1.05rem;
     line-height: 1.15;
     overflow-wrap: anywhere;
+    padding: 0.35rem 0.6rem;
 }
 
 /* Body and gallery */
@@ -423,7 +434,7 @@ h1,
 /* Gallery / images */
 .project__gallery {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
     align-items: start;
     justify-items: stretch;
@@ -543,7 +554,8 @@ h1,
     }
 
     .project__body {
-        grid-template-columns: 1fr 21.25rem;
+        grid-template-columns: 1fr 2fr;
+
         gap: 1.25rem;
     }
 
@@ -610,6 +622,6 @@ h1,
     }
 
     .project__gallery {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
     }
 }
